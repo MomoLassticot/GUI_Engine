@@ -141,6 +141,6 @@ function GE_draw_PB()
         bar_sprite = love.graphics.newImage("GE_asset/bliss/png/ProgressBar/Line.png")
         PB.variable = PB.variable
         love.graphics.draw(background_sprite, PB.posx, PB.posy, 0, PB.size, PB.size)
-        love.graphics.draw(bar_sprite, PB.posx + (bar_sprite:getWidth() / 80), PB.posy + (bar_sprite:getHeight() / 5), 0, (PB.size * 0.97) * (PB.variable / PB.maxvalue), PB.size)
+        love.graphics.draw(bar_sprite, PB.posx + ((bar_sprite:getWidth() * PB.size) / 80), PB.posy + ((bar_sprite:getHeight() * PB.size) / 5), 0, (PB.size * 0.97) * (PB.variable / PB.maxvalue), PB.size)
     end
 end
