@@ -7,6 +7,7 @@ font = love.graphics.newFont("GE_asset/bliss/Ubuntu-Titling/UbuntuTitling-Bold.t
 function GE_draw()
     GE_draw_Dbuttons()
     GE_draw_buttons1()
+    GE_draw_PB()
 end
 -- 1 | Drawn button -------------------------------------------------------------------------------------------------------------------------------------------
 Dbutton_list = {}
@@ -106,5 +107,40 @@ function GE_draw_buttons1()
                 end
             end
         end
+    end
+end
+
+
+-- 3 progress Bar ------------------------------------------------------------------------------------------------------------
+PB_list = {}
+
+function GE_newPB(variable, maxvalue, posx, posy, size, fnp, fnm) 
+    return {
+        variable = variable,
+        maxvalue = maxvalue,
+        posx = posx or 10,
+        posy = posy or 10,
+        size = size or 1
+    }
+end
+
+-- this variable clean the list so the PB can be updated without having an accumulation of sprite
+function GE_beforeCallingPB()
+    for i,v in ipairs(PB_list) do
+        table.remove(PB_list, i)
+    end
+end
+
+function GE_CreatePB(variable, maxvalue, posx, posy, size)
+    table.insert(PB_list, GE_newPB(variable, maxvalue, posx, posy, size))
+end
+
+function GE_draw_PB()
+    for i, PB in ipairs(PB_list) do
+        background_sprite = love.graphics.newImage("GE_asset/bliss/png/ProgressBar/Background.png")
+        bar_sprite = love.graphics.newImage("GE_asset/bliss/png/ProgressBar/Line.png")
+        PB.variable = PB.variable
+        love.graphics.draw(background_sprite, PB.posx, PB.posy, 0, PB.size, PB.size)
+        love.graphics.draw(bar_sprite, PB.posx + (bar_sprite:getWidth() / 80), PB.posy + (bar_sprite:getHeight() / 5), 0, (PB.size * 0.97) * (PB.variable / PB.maxvalue), PB.size)
     end
 end
