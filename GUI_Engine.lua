@@ -67,36 +67,38 @@ end
 -- 2 Button1 -------------------------------------------------------------------------------
 button1_list = {}
 
-function GE_newbutton1(text, posx, posy, size, fn) 
+function GE_newbutton1(text, posx, posy, sizeX, sizeY, fn, text_size) 
     return {
         text = text or "Button",
         posx = posx or 10,
         posy = posy or 10,
-        size = size,
+        sizeX = sizeX,
+        sizeY = sizeY,
         fn = fn or nilFN,
+        text_size = text_size or 1,
         isPressed = false
     }
 end
 
-function GE_Createbutton1(text, posx, posy, size, fn) 
-    table.insert(button1_list, GE_newbutton1(text, posx, posy, size,fn))
+function GE_Createbutton1(text, posx, posy, sizeX, sizeY, fn, text_size) 
+    table.insert(button1_list, GE_newbutton1(text, posx, posy, sizeX, sizeY, fn, text_size))
 end
 
 image_button1 = love.graphics.newImage("GE_asset/"..GE_theme.."/png/Button/Rect-Medium/Default.png")
 function GE_draw_buttons1()
     for i, button in ipairs(button1_list) do
-        if love.mouse.getX() > button.posx and love.mouse:getX() < button.posx+(image_button1:getWidth() * button.size) and love.mouse.getY() > button.posy and love.mouse.getY() < button.posy+(image_button1:getHeight()* button.size) then
+        if love.mouse.getX() > button.posx and love.mouse:getX() < button.posx+(image_button1:getWidth() * button.sizeX) and love.mouse.getY() > button.posy and love.mouse.getY() < button.posy+(image_button1:getHeight()* button.sizeY) then
             image_button1 = love.graphics.newImage("GE_asset/"..GE_theme.."/png/Button/Rect-Medium/Hover.png")
         else
             image_button1 = love.graphics.newImage("GE_asset/"..GE_theme.."/png/Button/Rect-Medium/Default.png")
         end
         love.graphics.setColor(1, 1, 1, 1)
-        love.graphics.draw(image_button1, button.posx, button.posy, 0, button.size, button.size)
+        love.graphics.draw(image_button1, button.posx, button.posy, 0, button.sizeX, button.sizeY)
         textW = font:getWidth(button.text)
         textH = font:getHeight(button.text)
-        love.graphics.print(button.text, font, button.posx + ((image_button1:getWidth() * button.size) / 2) - ((textW * button.size) / 2), button.posy + ((image_button1:getHeight() * button.size) / 2) - ((textH * button.size) / 2) + (button.size * 4), 0, button.size, button.size)
-        if love.mouse.getX() > button.posx and love.mouse:getX() < button.posx+(image_button1:getWidth()*button.size) then
-            if love.mouse.getY() > button.posy and love.mouse.getY() < button.posy+(image_button1:getHeight()*button.size) then
+        love.graphics.print(button.text, font, button.posx + ((image_button1:getWidth() * button.sizeX) / 2) - ((textW * button.text_size) / 2), button.posy + ((image_button1:getHeight() * button.sizeY) / 2) - ((textH * button.text_size) / 2) + (button.sizeY * 4), 0, button.text_size, button.text_size)
+        if love.mouse.getX() > button.posx and love.mouse:getX() < button.posx+(image_button1:getWidth()*button.sizeX) then
+            if love.mouse.getY() > button.posy and love.mouse.getY() < button.posy+(image_button1:getHeight()*button.sizeY) then
                 if love.mouse.isDown(1) then
                     if button.isPressed == false then 
                         button.fn()
