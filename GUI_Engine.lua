@@ -5,66 +5,18 @@ font = love.graphics.newFont("GE_asset/bliss/Ubuntu-Titling/UbuntuTitling-Bold.t
 
 -- General draw funxtion --------------------------------------------------------------------------------------------------------------------------------------------------
 function GE_draw()
-    GE_draw_Dbuttons()
     GE_draw_buttons1()
     GE_draw_PB()
 end
--- 1 | Drawn button -------------------------------------------------------------------------------------------------------------------------------------------
-Dbutton_list = {}
 
-function GE_newDbutton(text, posx, posy, sizex, sizey, fn, colorR, colorG, colorB, colorA, textR, textG, textB, textA) 
-    return {
-        text = text or "Button",
-        posx = posx or 10,
-        posy = posy or 10,
-        sizex = sizex or 60,
-        sizey = sizey or 30,
-        fn = fn or nilFN,
-        colorR = colorR or 1,
-        colorG = colorG or 1,
-        colorB = colorB or 1,
-        colorA = colorA or 0.7,
-        textR = textR or 0,
-        textG = textG or 0,
-        textB = textB or 0,
-        textA = textA or 1,
-        isPressed = false
-    }
-end
-
-function nilFN()
-    print("button pressed")
-end
-
-function GE_CreateDbutton(text, posx, posy, sizex, sizey, fn, colorR, colorG, colorB, colorA, textR, textG, textB, textA) 
-    table.insert(Dbutton_list, GE_newDbutton(text, posx, posy, sizex, sizey, fn, colorR, colorG, colorB, colorA, textR, textG, textB, textA))
-end
-
-function GE_draw_Dbuttons()
-    for i, button in ipairs(Dbutton_list) do
-        love.graphics.setColor(button.colorR, button.colorG, button.colorB, button.colorA)
-        love.graphics.rectangle("fill", button.posx, button.posy, button.sizex, button.sizey)
-        love.graphics.setColor(button.textR, button.textG, button.textB, button.textA)
-        textW = font:getWidth(button.text)
-        textH = font:getHeight(button.text)
-        love.graphics.print(button.text, font, button.posx + (button.sizex / 2) - (textW / 2), button.posy + (button.sizey / 2) - (textH / 2))
-        if love.mouse.getX() > button.posx and love.mouse.getX() < button.posx+button.sizex then
-            if love.mouse.getY() > button.posy and love.mouse.getY() < button.posy+button.sizey then
-                if love.mouse.isDown(1) then
-                    if button.isPressed == false then 
-                        button.fn()
-                        button.isPressed = true
-                    end
-                else
-                    button.isPressed = false
-                end
-            end
-        end
+-- General function to call before anything, to clean the lists
+function GE_beforeUpdate()
+    for i,v in ipairs(PB_list) do
+        table.remove(PB_list, i)
     end
 end
---------------------------------------------------------------------------------------------------------------------------------------
 
--- 2 Button1 -------------------------------------------------------------------------------
+-- 1 Button -------------------------------------------------------------------------------
 button1_list = {}
 
 function GE_newbutton1(text, posx, posy, sizeX, sizeY, fn, text_size) 
@@ -113,7 +65,7 @@ function GE_draw_buttons1()
 end
 
 
--- 3 progress Bar ------------------------------------------------------------------------------------------------------------
+-- 2 progress Bar ------------------------------------------------------------------------------------------------------------
 PB_list = {}
 
 function GE_newPB(variable, maxvalue, posx, posy, size, fnp, fnm) 
@@ -124,13 +76,6 @@ function GE_newPB(variable, maxvalue, posx, posy, size, fnp, fnm)
         posy = posy or 10,
         size = size or 1
     }
-end
-
--- this variable clean the list so the PB can be updated without having an accumulation of sprite
-function GE_beforeCallingPB()
-    for i,v in ipairs(PB_list) do
-        table.remove(PB_list, i)
-    end
 end
 
 function GE_CreatePB(variable, maxvalue, posx, posy, size)
