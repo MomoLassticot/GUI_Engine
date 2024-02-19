@@ -5,8 +5,9 @@ font = love.graphics.newFont("GE_asset/bliss/Ubuntu-Titling/UbuntuTitling-Bold.t
 
 -- General draw funxtion --------------------------------------------------------------------------------------------------------------------------------------------------
 function GE_draw()
-    GE_draw_buttons1()
+    GE_draw_button()
     GE_draw_PB()
+    GE_draw_Window()
 end
 
 -- General function to call before anything, to clean the lists
@@ -14,12 +15,15 @@ function GE_beforeUpdate()
     for i,v in ipairs(PB_list) do
         table.remove(PB_list, i)
     end
+    for i,v in ipairs(Window_list) do
+        table.remove(Window_list, i)
+    end
 end
 
 -- 1 Button -------------------------------------------------------------------------------
-button1_list = {}
+button_list = {}
 
-function GE_newbutton1(text, posx, posy, sizeX, sizeY, fn, text_size) 
+function GE_newbutton(text, posx, posy, sizeX, sizeY, fn, text_size) 
     return {
         text = text or "Button",
         posx = posx or 10,
@@ -32,25 +36,26 @@ function GE_newbutton1(text, posx, posy, sizeX, sizeY, fn, text_size)
     }
 end
 
-function GE_Createbutton1(text, posx, posy, sizeX, sizeY, fn, text_size) 
-    table.insert(button1_list, GE_newbutton1(text, posx, posy, sizeX, sizeY, fn, text_size))
+function GE_Createbutton(text, posx, posy, sizeX, sizeY, fn, text_size) 
+    table.insert(button_list, GE_newbutton(text, posx, posy, sizeX, sizeY, fn, text_size))
 end
 
-image_button1 = love.graphics.newImage("GE_asset/"..GE_theme.."/png/Button/Rect-Medium/Default.png")
-function GE_draw_buttons1()
-    for i, button in ipairs(button1_list) do
-        if love.mouse.getX() > button.posx and love.mouse:getX() < button.posx+(image_button1:getWidth() * button.sizeX) and love.mouse.getY() > button.posy and love.mouse.getY() < button.posy+(image_button1:getHeight()* button.sizeY) then
-            image_button1 = love.graphics.newImage("GE_asset/"..GE_theme.."/png/Button/Rect-Medium/Hover.png")
+image_button = love.graphics.newImage("GE_asset/"..GE_theme.."/png/Button/Rect-Medium/Default.png")
+function GE_draw_button()
+    love.graphics.setColor(1, 1, 1, 1)
+    for i, button in ipairs(button_list) do
+        if love.mouse.getX() > button.posx and love.mouse:getX() < button.posx+(image_button:getWidth() * button.sizeX) and love.mouse.getY() > button.posy and love.mouse.getY() < button.posy+(image_button:getHeight()* button.sizeY) then
+            image_button = love.graphics.newImage("GE_asset/"..GE_theme.."/png/Button/Rect-Medium/Hover.png")
         else
-            image_button1 = love.graphics.newImage("GE_asset/"..GE_theme.."/png/Button/Rect-Medium/Default.png")
+            image_button = love.graphics.newImage("GE_asset/"..GE_theme.."/png/Button/Rect-Medium/Default.png")
         end
         love.graphics.setColor(1, 1, 1, 1)
-        love.graphics.draw(image_button1, button.posx, button.posy, 0, button.sizeX, button.sizeY)
+        love.graphics.draw(image_button, button.posx, button.posy, 0, button.sizeX, button.sizeY)
         textW = font:getWidth(button.text)
         textH = font:getHeight(button.text)
-        love.graphics.print(button.text, font, button.posx + ((image_button1:getWidth() * button.sizeX) / 2) - ((textW * button.text_size) / 2), button.posy + ((image_button1:getHeight() * button.sizeY) / 2) - ((textH * button.text_size) / 2) + (button.sizeY * 4), 0, button.text_size, button.text_size)
-        if love.mouse.getX() > button.posx and love.mouse:getX() < button.posx+(image_button1:getWidth()*button.sizeX) then
-            if love.mouse.getY() > button.posy and love.mouse.getY() < button.posy+(image_button1:getHeight()*button.sizeY) then
+        love.graphics.print(button.text, font, button.posx + ((image_button:getWidth() * button.sizeX) / 2) - ((textW * button.text_size) / 2), button.posy + ((image_button:getHeight() * button.sizeY) / 2) - ((textH * button.text_size) / 2) + (button.sizeY * 4), 0, button.text_size, button.text_size)
+        if love.mouse.getX() > button.posx and love.mouse:getX() < button.posx+(image_button:getWidth()*button.sizeX) then
+            if love.mouse.getY() > button.posy and love.mouse.getY() < button.posy+(image_button:getHeight()*button.sizeY) then
                 if love.mouse.isDown(1) then
                     if button.isPressed == false then 
                         button.fn()
@@ -83,11 +88,45 @@ function GE_CreatePB(variable, maxvalue, posx, posy, size)
 end
 
 function GE_draw_PB()
+    love.graphics.setColor(1, 1, 1, 1)
     for i, PB in ipairs(PB_list) do
         background_sprite = love.graphics.newImage("GE_asset/bliss/png/ProgressBar/Background.png")
         bar_sprite = love.graphics.newImage("GE_asset/bliss/png/ProgressBar/Line.png")
-        PB.variable = PB.variable
         love.graphics.draw(background_sprite, PB.posx, PB.posy, 0, PB.size, PB.size)
         love.graphics.draw(bar_sprite, PB.posx + ((bar_sprite:getWidth() * PB.size) / 80), PB.posy + ((bar_sprite:getHeight() * PB.size) / 5), 0, (PB.size * 0.97) * (PB.variable / PB.maxvalue), PB.size)
+    end
+end
+
+-- 3 window --------------------------------------------------------------------------------------------------------------
+-- THE WAY IT WORK:
+    -- if the variable is == true then its show and is reactive, else it dont draw
+
+Window_list = {}
+
+function GE_newWindow(variable, category, posx, posy, sizex, sizey, title, text) 
+    return {
+        variable = variable,
+        category = category or "1",
+        posx = posx or 10,
+        posy = posy or 10,
+        sizex = sizex or 1,
+        sizey = sizey or 1,
+        title = title or "New Window",
+        text = text or "This is a window"
+    }
+end
+
+function GE_CreateWindow(variable, category, posx, posy, sizex, sizey, title, text)
+    table.insert(Window_list, GE_newWindow(variable, category, posx, posy, sizex, sizey, title, text))
+end
+
+function GE_draw_Window()
+    love.graphics.setColor(1, 1, 1, 1)
+    for i, Window in ipairs(Window_list) do
+        if Window.variable == true then
+            Window_sprite = love.graphics.newImage("GE_asset/bliss/png/Panel/Window/"..Window.category..".png")
+            love.graphics.draw(Window_sprite, Window.posx, Window.posy, 0, Window.sizex, Window.sizey)
+            love.graphics.print(Window.title, font, Window.posx + ((Window_sprite:getWidth() * Window.sizex) / 2) - ((font:getWidth(Window.title)) / 2), Window.posy + ((Window_sprite:getHeight() * Window.sizey)/16), 0, Window.sizex, Window.sizey)
+        end
     end
 end
