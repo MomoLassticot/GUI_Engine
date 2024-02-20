@@ -122,11 +122,12 @@ end
 
 function GE_draw_Window()
     love.graphics.setColor(1, 1, 1, 1)
+    Window_default_sprite = love.graphics.newImage("GE_asset/bliss/png/Panel/Window/1.png")
     for i, Window in ipairs(Window_list) do
         if Window.variable == true then
             Window_sprite = love.graphics.newImage("GE_asset/bliss/png/Panel/Window/"..Window.category..".png")
             love.graphics.draw(Window_sprite, Window.posx, Window.posy, 0, Window.sizex, Window.sizey)
-            love.graphics.print(Window.title, font, Window.posx + ((Window_sprite:getWidth() * Window.sizex) / 2) - ((font:getWidth(Window.title)) / 2), Window.posy + ((Window_sprite:getHeight() * Window.sizey)/16), 0, Window.sizex, Window.sizey)
+            love.graphics.print(Window.title, font, Window.posx + ((Window_default_sprite:getWidth() * Window.sizex) / 2) - ((font:getWidth(Window.title) * Window.sizex) / 2), Window.posy + ((Window_default_sprite:getHeight() * Window.sizey)/16), 0, Window.sizex, Window.sizey)
         end
     end
 end
