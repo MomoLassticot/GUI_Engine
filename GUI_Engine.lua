@@ -101,10 +101,11 @@ end
 
 Window_list = {}
 
-function GE_newWindow(variable, category, posx, posy, sizex, sizey, title, title_size, text, text_size, offset) 
+function GE_newWindow(variable, category, align, posx, posy, sizex, sizey, title, title_size, text, text_size, offset) 
     return {
         variable = variable,
         category = category or "1",
+        align = align,
         posx = posx or 10,
         posy = posy or 10,
         sizex = sizex or 1,
@@ -117,8 +118,8 @@ function GE_newWindow(variable, category, posx, posy, sizex, sizey, title, title
     }
 end
 
-function GE_CreateWindow(variable, category, posx, posy, sizex, sizey, title, title_size, text, text_size, offset)
-    table.insert(Window_list, GE_newWindow(variable, category, posx, posy, sizex, sizey, title, title_size, text, text_size, offset))
+function GE_CreateWindow(variable, category, align, posx, posy, sizex, sizey, title, title_size, text, text_size, offset)
+    table.insert(Window_list, GE_newWindow(variable, category, align, posx, posy, sizex, sizey, title, title_size, text, text_size, offset))
 end
 
 function GE_draw_Window()
@@ -132,7 +133,7 @@ function GE_draw_Window()
             love.graphics.print(Window.title, font, Window.posx + ((Window_default_sprite:getWidth() * Window.sizex) / 2) - ((font:getWidth(Window.title) * Window.title_size) / 2), Window.posy + ((Window_default_sprite:getHeight() * Window.sizey) / 15) + Window.offset, 0, Window.title_size, Window.title_size)
             love.graphics.setColor(0.3, 0.5, 0.85)
             font = love.graphics.newFont("GE_asset/bliss/Ubuntu-Titling/UbuntuTitling-Bold.ttf", 64 * Window.text_size)
-            love.graphics.printf(Window.text, font, Window.posx + ((Window_default_sprite:getWidth() * Window.sizex) / 30), Window.posy + ((Window_default_sprite:getHeight()*Window.sizey)/4), ((Window_default_sprite:getWidth() * Window.sizex)) - (((Window_sprite:getWidth() * Window.sizex) / 30)*2), "left", 0, 1, 1)
+            love.graphics.printf(Window.text, font, Window.posx + ((Window_default_sprite:getWidth() * Window.sizex) / 30), Window.posy + ((Window_default_sprite:getHeight()*Window.sizey)/4), ((Window_default_sprite:getWidth() * Window.sizex)) - (((Window_sprite:getWidth() * Window.sizex) / 30)*2), Window.align, 0, 1, 1)
             --love.graphics.rectangle("line", Window.posx + ((Window_default_sprite:getWidth() * Window.sizex) / 30), Window.posy + ((Window_default_sprite:getHeight()*Window.sizey)/4), ((Window_default_sprite:getWidth() * Window.sizex)) - (((Window_sprite:getWidth() * Window.sizex) / 30)*2), 100)
             font = love.graphics.newFont("GE_asset/bliss/Ubuntu-Titling/UbuntuTitling-Bold.ttf", 64)
         end
