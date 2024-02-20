@@ -103,7 +103,7 @@ end
 
 Window_list = {}
 
-function GE_newWindow(variable, category, posx, posy, sizex, sizey, title, text) 
+function GE_newWindow(variable, category, posx, posy, sizex, sizey, title, title_size, text, text_size, offset) 
     return {
         variable = variable,
         category = category or "1",
@@ -112,12 +112,15 @@ function GE_newWindow(variable, category, posx, posy, sizex, sizey, title, text)
         sizex = sizex or 1,
         sizey = sizey or 1,
         title = title or "New Window",
-        text = text or "This is a window"
+        title_size = title_size,
+        text = text or "This is a window",
+        text_size = text_size,
+        offset = offset or 0
     }
 end
 
-function GE_CreateWindow(variable, category, posx, posy, sizex, sizey, title, text)
-    table.insert(Window_list, GE_newWindow(variable, category, posx, posy, sizex, sizey, title, text))
+function GE_CreateWindow(variable, category, posx, posy, sizex, sizey, title, title_size, text, text_size, offset)
+    table.insert(Window_list, GE_newWindow(variable, category, posx, posy, sizex, sizey, title, title_size, text, text_size, offset))
 end
 
 function GE_draw_Window()
@@ -127,7 +130,7 @@ function GE_draw_Window()
         if Window.variable == true then
             Window_sprite = love.graphics.newImage("GE_asset/bliss/png/Panel/Window/"..Window.category..".png")
             love.graphics.draw(Window_sprite, Window.posx, Window.posy, 0, Window.sizex, Window.sizey)
-            love.graphics.print(Window.title, font, Window.posx + ((Window_default_sprite:getWidth() * Window.sizex) / 2) - ((font:getWidth(Window.title) * Window.sizex) / 2), Window.posy + ((Window_default_sprite:getHeight() * Window.sizey)/16), 0, Window.sizex, Window.sizey)
+            love.graphics.print(Window.title, font, Window.posx + ((Window_default_sprite:getWidth() * Window.sizex) / 2) - ((font:getWidth(Window.title) * Window.title_size) / 2), Window.posy + ((Window_default_sprite:getHeight() * Window.sizey) / 15) + Window.offset, 0, Window.title_size, Window.title_size)
         end
     end
 end
