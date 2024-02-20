@@ -98,8 +98,6 @@ function GE_draw_PB()
 end
 
 -- 3 window --------------------------------------------------------------------------------------------------------------
--- THE WAY IT WORK:
-    -- if the variable is == true then its show and is reactive, else it dont draw
 
 Window_list = {}
 
@@ -128,9 +126,15 @@ function GE_draw_Window()
     Window_default_sprite = love.graphics.newImage("GE_asset/bliss/png/Panel/Window/1.png")
     for i, Window in ipairs(Window_list) do
         if Window.variable == true then
+            love.graphics.setColor(1, 1, 1, 1)
             Window_sprite = love.graphics.newImage("GE_asset/bliss/png/Panel/Window/"..Window.category..".png")
             love.graphics.draw(Window_sprite, Window.posx, Window.posy, 0, Window.sizex, Window.sizey)
             love.graphics.print(Window.title, font, Window.posx + ((Window_default_sprite:getWidth() * Window.sizex) / 2) - ((font:getWidth(Window.title) * Window.title_size) / 2), Window.posy + ((Window_default_sprite:getHeight() * Window.sizey) / 15) + Window.offset, 0, Window.title_size, Window.title_size)
+            love.graphics.setColor(0.3, 0.5, 0.85)
+            font = love.graphics.newFont("GE_asset/bliss/Ubuntu-Titling/UbuntuTitling-Bold.ttf", 64 * Window.text_size)
+            love.graphics.printf(Window.text, font, Window.posx + ((Window_default_sprite:getWidth() * Window.sizex) / 30), Window.posy + ((Window_default_sprite:getHeight()*Window.sizey)/4), ((Window_default_sprite:getWidth() * Window.sizex)) - (((Window_sprite:getWidth() * Window.sizex) / 30)*2), "left", 0, 1, 1)
+            --love.graphics.rectangle("line", Window.posx + ((Window_default_sprite:getWidth() * Window.sizex) / 30), Window.posy + ((Window_default_sprite:getHeight()*Window.sizey)/4), ((Window_default_sprite:getWidth() * Window.sizex)) - (((Window_sprite:getWidth() * Window.sizex) / 30)*2), 100)
+            font = love.graphics.newFont("GE_asset/bliss/Ubuntu-Titling/UbuntuTitling-Bold.ttf", 64)
         end
     end
 end
